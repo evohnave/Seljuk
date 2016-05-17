@@ -50,6 +50,7 @@ Get1CompletedItem <- function(itm){
     title <- results[[1]]
     imageURLs <- results[[2]]
     saveEbayImage(itm, imageURLs)
+    writeToMongoDB(itm, price, endTime, title, imageURLs) # Not Done yet!
 }
 
 saveEbayImage <- function(item, imgUrls) {
