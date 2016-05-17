@@ -34,41 +34,23 @@ stripBS <- function(str) {
     library(stringi)
     return(stri_trim_both(str))
 }
-# Get1CompletedItem <- function(itm){
-# Will get 1 completed item, including price, description, and pictures
-# OK, no description for now
-# Create item url
-itmURLstart <- "http://www.ebay.de/itm/"
-itmURLend <- "?nma=true&orig_cvip=true"
-itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
-# Get item
-html <- read_html(itmURL)
-price <- html_nodes(html, "#prcIsum_bidPrice") %>% xml_text()
-endTime <- html_nodes(html, "#bb_tlft") %>% xml_text() %>% stripBS()
-# Description not working, so skip for now
-#desc <- html_nodes(html, "table, ds_div") %>% xml_text() %>% stripBS()
-imgs <- html_nodes(html, xpath = "//img")
-# There's a faster way to do this but...
-# Get the kind of img src I want
-imgList <- imgs[grepl(pattern = "http://i.ebayimg.com/t/*",
-                 x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
-# Get rid of the beginning
-imgList <- gsub(pattern = "http://i.ebayimg.com/t/",
-                x = imgList, replacement = "",
-                ignore.case = TRUE)
-# Strip off the /$_##.JPG
-imgList <- gsub(pattern = "\\/\\$_[0-9]{2}\\.JPG",
-                x = imgList, replacement = "",
-                ignore.case = TRUE)
-# Split on /00/s/
-imgList <- stri_split(imgList, regex = "\\/00\\/s\\/")
-# Sort the strings
-imgList <- matrix(data = unlist(imgList), byrow = TRUE, ncol = 2)
-title <- unique(imgList[ ,1])
-imgs <- unique(imgList[ ,2])
-# Rebuild image urls
-imgs <- paste("http://i.ebayimg.com/t/",title, "/00/s/", imgs, "/$_10.jpg", sep = "")
-
+Get1CompletedItem <- function(itm){
+    # Will get 1 completed item, including price, description, and pictures
+    # OK, no description for now
+    # Create item url
+    itmURLstart <- "http://www.ebay.de/itm/"
+    itmURLend <- "?nma=true&orig_cvip=true"
+    itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
+    # Get item
+    html <- read_html(itmURL)
+    price <- html_nodes(html, "#prcIsum_bidPrice") %>% xml_text()
+    endTime <- html_nodes(html, "#bb_tlft") %>% xml_text() %>% stripBS()
+    # Description not working, so skip for now
+    results <- getEbayImagesAndTitle(html)
+    title <- results[[1]]
+    imageURLs <- results[[2]]
+    saveEbayImage(itm, imageURLs)
+}
 
 saveEbayImage <- function(item, imgUrls) {
     # Expect: item to be the 12 digit item number
