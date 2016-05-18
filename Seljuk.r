@@ -36,7 +36,7 @@ stripBS <- function(str) {
     return(stri_trim_both(str))
 }
 
-Get1CompletedItem <- function(itm){
+Get1CompletedItem <- function(itm, SeljukDF){
     # Will get 1 completed item, including price, description, and pictures
     # OK, no description for now
     # Create item url
@@ -53,7 +53,8 @@ Get1CompletedItem <- function(itm){
     imageURLs <- results[[2]]
     saveEbayImage(itm, imageURLs)
     SaveHTMLtoText(itm)
-    writeToMongoDB(itm, price, endTime, title, imageURLs) # Not Done yet!
+    SeljukDF <- writeToMongoDB(itm, price, endTime, title, imageURLs, SeljukDF)
+    return(SeljukDF)
 }
 
 saveEbayImage <- function(item, imgUrls) {
