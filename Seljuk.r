@@ -137,7 +137,7 @@ SaveHTMLtoText <- function(item){
     defaultDirectory <- IdentifyFileLibrary()
     itmURLstart <- "http://www.ebay.de/itm/"
     itmURLend <- "?nma=true&orig_cvip=true"
-    itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
+    itmURL <- paste(itmURLstart, item, itmURLend, sep = "")
     destFileName <- paste(defaultDirectory, "html/", item,".htm", sep = "")
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
 }
