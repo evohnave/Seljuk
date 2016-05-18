@@ -145,5 +145,5 @@ SaveHTMLtoText <- function(item){
 RemoveDoneItems <- function(CompletedItems, SeljuksDF){
     # Removes already gotten items from CompletedItems and
     #  returns them. SeljuksDF in this case is only first column
-    return(CompletedItems[1 - (CompletedItems %in% SeljuksDF)])
+    return(setdiff(CompletedItems, SeljuksDF))
 }
