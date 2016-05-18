@@ -6,7 +6,8 @@ GetCompletedItems <- function(){
     # LANZ Rumseldschuken search string
     searchURL <- "http://www.ebay.de/sch/Turkey/45159/i.html?_from=R40&_nkw=LANZ+Rumseldschuken&_in_kw=1&_sacat=45159&LH_Complete=1&_sadis=15&_sargn=-1%26saslc%3D1&_salic=1&_fss=1&_fsradio=%26LH_SpecificSeller%3D1&_saslop=1&_sasl=numismatiklanz&_sop=10&_dmd=7&_ipg=200"
     
-    library(rvest)
+    suppressWarnings(library(rvest, quietly = TRUE,warn.conflicts = FALSE))
+    suppressWarnings(library(dplyr, quietly = TRUE,warn.conflicts = FALSE))
     # Get the web page
     html <- read_html(searchURL, verbose = TRUE)
     # Get the <li> tags
@@ -57,7 +58,8 @@ saveEbayImage <- function(item, imgUrls) {
     # Expect: item to be the 12 digit item number
     #         imgUrls to be 2 image urls
     # Will save to default directory, one as item + o.jpg, one as item + r.jpg
-    defaultDirectory <- "D:/Downloads/Seljuk/"
+    #defaultDirectory <- "D:/Downloads/Seljuk/"
+    defaultDirectory <- "//DS/Seljuk/"
     destFileName <- paste(defaultDirectory, item, c("o","r"),".jpg", sep = "")
     lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
                                         destfile = destFileName[x],
