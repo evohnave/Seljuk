@@ -121,13 +121,14 @@ writeToMongoDB <- function(itm, price, endTime, title, imageURLs, SeljukDF){
 
 InitializeSeljuks <- function(){
     # Read CSV file, create DF
-    return(read.csv("Seljuk.csv", stringsAsFactors = FALSE))
+    return(read.csv("Seljuk.csv", stringsAsFactors = FALSE,
+                    colClasses = rep("character", 15)))
 }
 
 CloseSeljuks <- function(SeljukDF){
     # Writes the CSV file
     # Won't need once we go to MongoDB
-    write.csv(x = SeljukDF, file = "Seljuk.csv")
+    write.csv(x = SeljukDF, file = "Seljuk.csv", row.names = FALSE)
 }
 
 SaveHTMLtoText <- function(item){
