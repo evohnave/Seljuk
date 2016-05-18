@@ -94,3 +94,11 @@ getEbayImagesAndTitle <- function(html){
     # now return title and imgs
     return(list(title, imgs))
 }
+
+IdentifyFileLibrary <- function(){
+    df <- matrix(data = c(
+        "SEIP06-W7", "DS", "DT", "DT2", "SP3",
+        "C:/Users/eav1/Dropbox/Seljuk/Images/", "//DS/Seljuk", "//DT/Seljuk",
+        "//DT2/Seljuk", "//SP3/Seljuk"), ncol = 2,byrow = FALSE)
+    return(df[df[,1]==Sys.info()["nodename"],2])
+}
