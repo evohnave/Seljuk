@@ -36,7 +36,7 @@ stripBS <- function(str) {
     return(stri_trim_both(str))
 }
 
-Get1CompletedItem <- function(itm, SeljukDF){
+Get1CompletedItem <- function(itm, SeljuksDF){
     # Will get 1 completed item, including price, description, and pictures
     # OK, no description for now
     # Create item url
@@ -53,8 +53,8 @@ Get1CompletedItem <- function(itm, SeljukDF){
     imageURLs <- results[[2]]
     saveEbayImage(itm, imageURLs)
     SaveHTMLtoText(itm)
-    SeljukDF <- writeToMongoDB(itm, price, endTime, title, imageURLs, SeljukDF)
-    return(SeljukDF)
+    SeljuksDF <- writeToMongoDB(itm, price, endTime, title, imageURLs, SeljuksDF)
+    return(SeljuksDF)
 }
 
 saveEbayImage <- function(item, imgUrls) {
@@ -107,16 +107,16 @@ IdentifyFileLibrary <- function(){
     return(df[df[,1]==Sys.info()["nodename"],2])
 }
 
-writeToMongoDB <- function(itm, price, endTime, title, imageURLs, SeljukDF){
+writeToMongoDB <- function(itm, price, endTime, title, imageURLs, SeljuksDF){
     # First version won't use Mongo but just a csv
-    # Returns new SeljukDF
-    newRow <- SeljukDF[1,]
+    # Returns new SeljuksDF
+    newRow <- SeljuksDF[1,]
     newRow[1] <- itm; newRow[2] <- title; newRow[3] <- endTime
     newRow[4] <- price; newRow[c(5:9, 12:13)] <- ""
     newRow[10] <- paste(itm, "o.jpg", sep = "")
     newRow[11] <- paste(itm, "r.jpg", sep = "")
     newRow[14:15] <- imageURLs
-    return(rbind(SeljukDF, newRow))
+    return(rbind(SeljuksDF, newRow))
 }
 
 InitializeSeljuks <- function(){
@@ -125,10 +125,10 @@ InitializeSeljuks <- function(){
                     colClasses = rep("character", 15)))
 }
 
-CloseSeljuks <- function(SeljukDF){
+CloseSeljuks <- function(SeljuksDF){
     # Writes the CSV file
     # Won't need once we go to MongoDB
-    write.csv(x = SeljukDF, file = "Seljuk.csv", row.names = FALSE)
+    write.csv(x = SeljuksDF, file = "Seljuk.csv", row.names = FALSE)
 }
 
 SaveHTMLtoText <- function(item){
@@ -142,8 +142,8 @@ SaveHTMLtoText <- function(item){
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
 }
 
-RemoveDoneItems <- function(CompletedItems, SeljukDF){
+RemoveDoneItems <- function(CompletedItems, SeljuksDF){
     # Removes already gotten items from CompletedItems and
-    #  returns them. SeljukDF in this case is only first column
-    return(CompletedItems[1 - (CompletedItems %in% SeljukDF)])
+    #  returns them. SeljuksDF in this case is only first column
+    return(CompletedItems[1 - (CompletedItems %in% SeljuksDF)])
 }
