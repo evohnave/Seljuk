@@ -5,7 +5,6 @@ GetCompletedItems <- function(){
     #   other sellers
     # LANZ Rumseldschuken search string
     searchURL <- "http://www.ebay.de/sch/Turkey/45159/i.html?_from=R40&_nkw=LANZ+Rumseldschuken&_in_kw=1&_sacat=45159&LH_Complete=1&_sadis=15&_sargn=-1%26saslc%3D1&_salic=1&_fss=1&_fsradio=%26LH_SpecificSeller%3D1&_saslop=1&_sasl=numismatiklanz&_sop=10&_dmd=7&_ipg=200"
-    
     suppressWarnings(library(rvest, quietly = TRUE,warn.conflicts = FALSE))
     suppressWarnings(library(dplyr, quietly = TRUE,warn.conflicts = FALSE))
     # Get the web page
@@ -26,6 +25,7 @@ GetCompletedItems <- function(){
     # OK, I've got the list of items to look at.
     return(artNums)
 }
+
 stripBS <- function(str) {
     # cleans up time for ebay.de
     # also good for other things on an ebay page
@@ -35,6 +35,7 @@ stripBS <- function(str) {
     library(stringi)
     return(stri_trim_both(str))
 }
+
 Get1CompletedItem <- function(itm){
     # Will get 1 completed item, including price, description, and pictures
     # OK, no description for now
@@ -59,8 +60,9 @@ saveEbayImage <- function(item, imgUrls) {
     #         imgUrls to be 2 image urls
     # Will save to default directory, one as item + o.jpg, one as item + r.jpg
     #defaultDirectory <- "D:/Downloads/Seljuk/"
-    defaultDirectory <- "//DS/Seljuk/"
-    destFileName <- paste(defaultDirectory, item, c("o","r"),".jpg", sep = "")
+    defaultDirectory <- IdentifyFileLibrary()
+    destFileName <- paste(defaultDirectory, "Images/", item,
+                          c("o","r"),".jpg", sep = "")
     lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
                                         destfile = destFileName[x],
                                         mode = "wb")})
@@ -98,7 +100,47 @@ getEbayImagesAndTitle <- function(html){
 IdentifyFileLibrary <- function(){
     df <- matrix(data = c(
         "SEIP06-W7", "DS", "DT", "DT2", "SP3",
-        "C:/Users/eav1/Dropbox/Seljuk/Images/", "//DS/Seljuk", "//DT/Seljuk",
-        "//DT2/Seljuk", "//SP3/Seljuk"), ncol = 2,byrow = FALSE)
+        "C:/Users/eav1/Dropbox/Seljuk/", "//DS/Seljuk/", "//DT/Seljuk/",
+        "//DT2/Seljuk/", "//SP3/Seljuk/"), ncol = 2,byrow = FALSE)
     return(df[df[,1]==Sys.info()["nodename"],2])
+}
+
+writeToMongoDB <- function(itm, price, endTime, title, imageURLs, SeljukDF){
+    # First version won't use Mongo but just a csv
+    # Returns new SeljukDF
+    newRow <- SeljukDF[1,]
+    newRow[1] <- itm; newRow[2] <- title; newRow[3] <- endTime
+    newRow[4] <- price; newRow[c(5:9, 12:13)] <- ""
+    newRow[10] <- paste(itm, "o.jpg", sep = "")
+    newRow[11] <- paste(itm, "r.jpg", sep = "")
+    newRow[14:15] <- imageURLs
+    return(rbind(SeljukDF, newRow))
+}
+
+InitializeSeljuks <- function(){
+    # Read CSV file, create DF
+    return(read.csv("Seljuk.csv", stringsAsFactors = FALSE))
+}
+
+CloseSeljuks <- function(SeljukDF){
+    # Writes the CSV file
+    # Won't need once we go to MongoDB
+    write.csv(x = SeljukDF, file = "Seljuk.csv")
+}
+
+SaveHTMLtoText <- function(item){
+    # Expect: item to be the 12 digit item number
+    # Will save to default directory plus 'html/'
+    defaultDirectory <- IdentifyFileLibrary()
+    itmURLstart <- "http://www.ebay.de/itm/"
+    itmURLend <- "?nma=true&orig_cvip=true"
+    itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
+    destFileName <- paste(defaultDirectory, "html/", item,".htm", sep = "")
+    download.file(url = itmURL, destfile = destFileName, mode = "wb")
+}
+
+RemoveDoneItems <- function(CompletedItems, SeljukDF){
+    # Removes already gotten items from CompletedItems and
+    #  returns them. SeljukDF in this case is only first column
+    return(CompletedItems[1 - (CompletedItems %in% SeljukDF)])
 }
