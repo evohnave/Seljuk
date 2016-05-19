@@ -1,6 +1,8 @@
 source("Seljuk.r")
 
 SeljuksDF <- InitializeSeljuks()
+
+par(mfrow = c(3,2))
 vals <- SeljuksDF$Price
 vals <- gsub(pattern = "EUR ", replacement = "", x = vals)
 vals <- gsub(pattern = ",", replacement = ".", x = vals)
