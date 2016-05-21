@@ -103,6 +103,7 @@ IdentifyFileLibrary <- function(){
     df <- matrix(data = c(
         "SEIP06-W7", "C:/Users/eav1/Dropbox/Seljuk/",
         "DS", "C:/Users/Eric/Dropbox/Seljuk/",
+        "DS", "C:/Users/Eric/Dropbox/Seljuk",
         "DT", "C:/Users/Cire/Dropbox/Seljuk/",
         "DT2", "//DT2/Seljuk/",
         "SP3", "C:/Users/Eric/Dropbox/Seljuk/"), ncol = 2, byrow = TRUE)
