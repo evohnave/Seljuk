@@ -57,7 +57,7 @@ Get1CompletedItem <- function(itm, SeljuksDF){
     return(SeljuksDF)
 }
 
-saveEbayImage <- function(item, imgUrls) {
+saveEbayImage2 <- function(item, imgUrls) {
     # Expect: item to be the 12 digit item number
     #         imgUrls to be 2 image urls
     # Will save to default directory, one as item + o.jpg, one as item + r.jpg
@@ -68,6 +68,18 @@ saveEbayImage <- function(item, imgUrls) {
     lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
                                         destfile = destFileName[x],
                                         mode = "wb")})
+}
+
+saveEbayImage <- function(item, imgUrls) {
+    # Expect: item to be the 12 digit item number
+    #         imgUrls to be 2 image urls
+    # Will save to default directory, one as item + o.jpg, one as item + r.jpg
+    
+    destFileName <- paste("./Images/", item,
+                          c("o","r"),".jpg", sep = "")
+    lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
+                                                    destfile = destFileName[x],
+                                                    mode = "wb")})
 }
 
 getEbayImagesAndTitle <- function(html){
@@ -134,7 +146,7 @@ CloseSeljuks <- function(SeljuksDF){
     write.csv(x = SeljuksDF, file = "Seljuk.csv", row.names = FALSE)
 }
 
-SaveHTMLtoText <- function(item){
+SaveHTMLtoText2 <- function(item){
     # Expect: item to be the 12 digit item number
     # Will save to default directory plus 'html/'
     defaultDirectory <- IdentifyFileLibrary()
@@ -142,6 +154,17 @@ SaveHTMLtoText <- function(item){
     itmURLend <- "?nma=true&orig_cvip=true"
     itmURL <- paste(itmURLstart, item, itmURLend, sep = "")
     destFileName <- paste(defaultDirectory, "html/", item,".htm", sep = "")
+    download.file(url = itmURL, destfile = destFileName, mode = "wb")
+}
+
+SaveHTMLtoText <- function(item){
+    # Expect: item to be the 12 digit item number
+    # Will save to default directory plus '/html/'
+    
+    itmURLstart <- "http://www.ebay.de/itm/"
+    itmURLend <- "?nma=true&orig_cvip=true"
+    itmURL <- paste(itmURLstart, item, itmURLend, sep = "")
+    destFileName <- paste("./html/", item,".htm", sep = "")
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
 }
 
