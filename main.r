@@ -43,12 +43,13 @@ GetGenericLANZItems <- function(LanzType) {
             results <- getEbayImagesAndTitle(html)
             title <- results[[1]]
             imageURLs <- results[[2]]
+            if(length(imageURLs) == 1) {imageURLs <- rep(imageURLs, 2)}
             # Save images
             destFileName <- paste(base,  LanzType, "/", "Images/", itm,
                                   c("o","r"), ".jpg", sep = "")
-            lapply(X = 1:2, FUN = function(x){download.file(url = imageURLs[x],
-                                                            destfile = destFileName[x],
-                                                            mode = "wb")})
+            try(download.file(url = imageURLs[1], destfile = destFileName[1], mode = "wb"))
+            try(download.file(url = imageURLs[2], destfile = destFileName[2], mode = "wb"))
+
             # Save html to text
             itmURLstart <- "http://www.ebay.de/itm/"
             itmURLend <- "?nma=true&orig_cvip=true"
