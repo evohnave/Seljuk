@@ -14,3 +14,51 @@ GetCompletedSeljuks <- function(){
     # Clean up
     rm(list = ls())
 }
+
+GetGenericLANZItems <- function(LanzType) {
+    # Generic version of GetCompletedSeljuks
+    
+}
+
+LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
+                             "Umayyid", "Umayyaden",
+                             "Khwarizmshah", "Khwarizmshahs",
+                             "Ottoman", "Osmanen%2C+Osmanisches",
+                             "Muwahhid", "Muwahhiden%2C+Muwahhid",
+                             "Ghorid", "Ghoriden",
+                             "Artuqid","Urtukiden%2C+Artukiden",
+                             "Arab-Byzantine", "Arabo-Byzantiner",
+                             "Abbasid", "Abbasiden",
+                             "Ayyubid", "Ayyubiden",
+                             "Inalid", "Inaliden",
+                             "Zengid", "Zengiden",
+                             "Lu'lu'id", "Luluiden",
+                             "Atabegs", "Atabegs",
+                             "Mameluke", "Mamelukken%2C+Mameluken",
+                             "Fatimid", "Farimiden",
+                             "Timurid", "Timuriden",
+                             "Ghaznavid", "Ghaznaviden",
+                             "Turkey", "Türkei%2C+Turkei%2C+Turkey",
+                             "Mongol", "Mongolei",
+                             "Sasanid", "Sasaniden",
+                             "Crusaders", "Crusaders%2C+Kreuzfahrer",
+                             "Tabaristan", "Tabaristan",
+                             "Armenia", "Armenien",
+                             "Byzantine", "Byzantine",
+                             "Achaea", "Achaea%2C+Achaia"),
+                    ncol = 2, byrow = TRUE)
+colnames(LanzTypes) <- c("Type", "SearchTerm")
+
+CreateDirectories <- function(LanzTypes) {
+    base <- "J:/Lanz/"
+    for(i in 1:(dim(LanzTypes)[1])){
+        newDir <- paste(base, LanzTypes[i, 1], "/", sep = "")
+        success <- dir.create(path = newDir)
+        if(success){
+            htmlDir <- paste(newDir, "html/", sep = "")
+            imageDir <- paste(newDir, "images/", sep = "")
+            success <- dir.create(path = htmlDir)
+            success <- dir.create(path = imageDir)
+        }
+    }
+}
