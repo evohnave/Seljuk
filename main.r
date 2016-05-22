@@ -62,3 +62,14 @@ CreateDirectories <- function(LanzTypes) {
         }
     }
 }
+
+CreateCSVfiles <- function(LanzTypes){
+    base <- "J:/Lanz/"
+    # Read in sample data
+    myDF <- InitializeSeljuks()[1,]
+    myDF[1, 1] <- "100000000000"
+    for(i in 1:(dim(LanzTypes)[1])){
+        csvFileName <- paste(base, LanzTypes[i, 1], "/", LanzTypes[i, 1], ".csv", sep = "")
+        write.csv(x = myDF, file = csvFileName, row.names = FALSE)
+    }
+}
