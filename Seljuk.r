@@ -1,10 +1,5 @@
-GetCompletedItems <- function(){
+GetCompletedItems <- function(searchURL){
     # Get list of latest completed auctions using search string
-    #  Current search string is "LANZ Rumseldschuken"
-    #  Later, perhaps change this to get other types of items from
-    #   other sellers
-    # LANZ Rumseldschuken search string
-    searchURL <- "http://www.ebay.de/sch/Turkey/45159/i.html?_from=R40&_nkw=LANZ+Rumseldschuken&_in_kw=1&_sacat=45159&LH_Complete=1&_sadis=15&_sargn=-1%26saslc%3D1&_salic=1&_fss=1&_fsradio=%26LH_SpecificSeller%3D1&_saslop=1&_sasl=numismatiklanz&_sop=10&_dmd=7&_ipg=200"
     suppressWarnings(library(rvest, quietly = TRUE, warn.conflicts = FALSE))
     suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
     # Get the web page
