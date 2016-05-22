@@ -25,13 +25,48 @@ GetGenericLANZItems <- function(LanzType) {
                      colClasses = rep("character", 15))
     # Create searchURL
     searchURL <- CreateSearchURL(searchTerms = LanzTypes[(LanzTypes[, 1] == LanzType), 2])
-    
     # Get completed items, remove those already done
     CompletedItems <- GetCompletedItems(searchURL)
     CompletedItems <- RemoveDoneItems(CompletedItems, myDF$Item_Number)
-    
     # Loop over items, Get1CompletedItem
-    
+    if(length(CompletedItems)>0){
+        for(i in 1:(length(CompletedItems))){
+            itm <- CompletedItems[i]
+            # Create item url
+            itmURLstart <- "http://www.ebay.de/itm/"
+            itmURLend <- "?nma=true&orig_cvip=true"
+            itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
+            # Get item
+            html <- read_html(itmURL)
+            price <- html_nodes(html, "#prcIsum_bidPrice") %>% xml_text()
+            endTime <- html_nodes(html, "#bb_tlft") %>% xml_text() %>% stripBS()
+            results <- getEbayImagesAndTitle(html)
+            title <- results[[1]]
+            imageURLs <- results[[2]]
+            # Save images
+            destFileName <- paste(base, "Images/", itm,
+                                  c("o","r"), ".jpg", sep = "")
+            lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
+                                                            destfile = destFileName[x],
+                                                            mode = "wb")})
+            # Save html to text
+            itmURLstart <- "http://www.ebay.de/itm/"
+            itmURLend <- "?nma=true&orig_cvip=true"
+            itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
+            destFileName <- paste(base, "html/", itm, ".htm", sep = "")
+            download.file(url = itmURL, destfile = destFileName, mode = "wb")
+            
+            # Write item to DF
+            newRow <- myDF[1, ]
+            newRow[1] <- itm; newRow[2] <- title; newRow[3] <- endTime
+            newRow[4] <- price; newRow[c(5:9, 12:13)] <- ""
+            newRow[10] <- paste(itm, "o.jpg", sep = "")
+            newRow[11] <- paste(itm, "r.jpg", sep = "")
+            newRow[14:15] <- imageURLs
+            myDF <- rbind(myDF, newRow)
+        }
+    }
+
 }
 
 LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
