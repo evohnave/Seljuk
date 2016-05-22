@@ -5,14 +5,14 @@ GetCompletedItems <- function(){
     #   other sellers
     # LANZ Rumseldschuken search string
     searchURL <- "http://www.ebay.de/sch/Turkey/45159/i.html?_from=R40&_nkw=LANZ+Rumseldschuken&_in_kw=1&_sacat=45159&LH_Complete=1&_sadis=15&_sargn=-1%26saslc%3D1&_salic=1&_fss=1&_fsradio=%26LH_SpecificSeller%3D1&_saslop=1&_sasl=numismatiklanz&_sop=10&_dmd=7&_ipg=200"
-    suppressWarnings(library(rvest, quietly = TRUE,warn.conflicts = FALSE))
-    suppressWarnings(library(dplyr, quietly = TRUE,warn.conflicts = FALSE))
+    suppressWarnings(library(rvest, quietly = TRUE, warn.conflicts = FALSE))
+    suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
     # Get the web page
     html <- read_html(searchURL, verbose = TRUE)
     # Get the <li> tags
     nodes <- html_nodes(x = html, xpath = "//li")
     # Look for <li>'s with Artikel
-    zz<-grepl(pattern = "*Artikel:",x = nodes)
+    zz<-grepl(pattern = "*Artikel:", x = nodes)
     nodes <- nodes[zz]
     # now artNums has twice the number of li's as items I'm interested in... 
     #  Found this at Stack Overflow...http://stackoverflow.com/ __
@@ -76,7 +76,7 @@ saveEbayImage <- function(item, imgUrls) {
     # Will save to default directory, one as item + o.jpg, one as item + r.jpg
     
     destFileName <- paste("./Images/", item,
-                          c("o","r"),".jpg", sep = "")
+                          c("o","r"), ".jpg", sep = "")
     lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
                                                     destfile = destFileName[x],
                                                     mode = "wb")})
@@ -119,13 +119,13 @@ IdentifyFileLibrary <- function(){
         "DT", "C:/Users/Cire/Dropbox/Seljuk/",
         "DT2", "C:/Users/Cire/Dropbox/Seljuk/",
         "SP3", "C:/Users/Eric/Dropbox/Seljuk/"), ncol = 2, byrow = TRUE)
-    return(df[df[,1]==Sys.info()["nodename"],2])
+    return(df[df[,1]==Sys.info()["nodename"], 2])
 }
 
 writeToMongoDB <- function(itm, price, endTime, title, imageURLs, SeljuksDF){
     # First version won't use Mongo but just a csv
     # Returns new SeljuksDF
-    newRow <- SeljuksDF[1,]
+    newRow <- SeljuksDF[1, ]
     newRow[1] <- itm; newRow[2] <- title; newRow[3] <- endTime
     newRow[4] <- price; newRow[c(5:9, 12:13)] <- ""
     newRow[10] <- paste(itm, "o.jpg", sep = "")
@@ -153,7 +153,7 @@ SaveHTMLtoText2 <- function(item){
     itmURLstart <- "http://www.ebay.de/itm/"
     itmURLend <- "?nma=true&orig_cvip=true"
     itmURL <- paste(itmURLstart, item, itmURLend, sep = "")
-    destFileName <- paste(defaultDirectory, "html/", item,".htm", sep = "")
+    destFileName <- paste(defaultDirectory, "html/", item, ".htm", sep = "")
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
 }
 
@@ -164,7 +164,7 @@ SaveHTMLtoText <- function(item){
     itmURLstart <- "http://www.ebay.de/itm/"
     itmURLend <- "?nma=true&orig_cvip=true"
     itmURL <- paste(itmURLstart, item, itmURLend, sep = "")
-    destFileName <- paste("./html/", item,".htm", sep = "")
+    destFileName <- paste("./html/", item, ".htm", sep = "")
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
 }
 
