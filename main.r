@@ -44,16 +44,16 @@ GetGenericLANZItems <- function(LanzType) {
             title <- results[[1]]
             imageURLs <- results[[2]]
             # Save images
-            destFileName <- paste(base, "Images/", itm,
+            destFileName <- paste(base,  LanzType, "/", "Images/", itm,
                                   c("o","r"), ".jpg", sep = "")
-            lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
+            lapply(X = 1:2, FUN = function(x){download.file(url = imageURLs[x],
                                                             destfile = destFileName[x],
                                                             mode = "wb")})
             # Save html to text
             itmURLstart <- "http://www.ebay.de/itm/"
             itmURLend <- "?nma=true&orig_cvip=true"
             itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
-            destFileName <- paste(base, "html/", itm, ".htm", sep = "")
+            destFileName <- paste(base,  LanzType, "/", "html/", itm, ".htm", sep = "")
             download.file(url = itmURL, destfile = destFileName, mode = "wb")
             
             # Write item to DF
