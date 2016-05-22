@@ -6,17 +6,10 @@ GetCompletedItems <- function(searchURL){
     html <- read_html(searchURL, verbose = TRUE)
     # Get the <li> tags
     nodes <- html_nodes(x = html, xpath = "//li")
-    # Look for <li>'s with Artikel
-    zz<-grepl(pattern = "*Artikel:", x = nodes)
-    nodes <- nodes[zz]
-    # now artNums has twice the number of li's as items I'm interested in... 
-    #  Found this at Stack Overflow...http://stackoverflow.com/ __
-    #  /questions/34511885/convert-xml-nodeset-to-data-frame
-    #  Converts the {xml_nodeset}
     df<- bind_rows(lapply(xml_attrs(nodes), 
                           function(x) data.frame(as.list(x), 
                                                  stringsAsFactors=FALSE)))
-    artNums <- df$listingid
+    artNums <- df$listingid[!(is.na(df$listingid))]
     # OK, I've got the list of items to look at.
     return(artNums)
 }
