@@ -163,8 +163,7 @@ SaveHTMLtoText <- function(item){
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
 }
 
-RemoveDoneItems <- function(CompletedItems, SeljuksDF){
-    # Removes already gotten items from CompletedItems and
-    #  returns them. SeljuksDF in this case is only first column
-    return(setdiff(CompletedItems, SeljuksDF))
+RemoveDoneItems <- function(ToDoItems, CompletedItems){
+    # Removes already gotten items from ToDoItems and returns them.
+    return(setdiff(ToDoItems, CompletedItems))
 }
