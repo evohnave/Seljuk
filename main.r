@@ -73,3 +73,15 @@ CreateCSVfiles <- function(LanzTypes){
         write.csv(x = myDF, file = csvFileName, row.names = FALSE)
     }
 }
+
+RemoveStarterEntry <- function(LanzTypes){
+    base <- "J:/Lanz/"
+    for(i in 1:(dim(LanzTypes)[1])){
+        csvFileName <- paste(base, LanzTypes[i, 1], "/", LanzTypes[i, 1], ".csv", sep = "")
+        myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
+                         colClasses = rep("character", 15))
+        myDF <- myDF[-(myDF[, 1])]
+        myDF <- myDF[!(myDF$Item_Number == "100000000000"), ]
+        write.csv(x = myDF, file = csvFileName, row.names = FALSE)
+    }    
+}
