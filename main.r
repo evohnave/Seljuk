@@ -26,8 +26,9 @@ GetGenericLANZItems <- function(LanzType) {
     # Create searchURL
     searchURL <- CreateSearchURL(searchTerms = LanzTypes[(LanzTypes[, 1] == LanzType), 2])
     
-    # Get completed items
-    # Code here
+    # Get completed items, remove those already done
+    CompletedItems <- GetCompletedItems(searchURL)
+    CompletedItems <- RemoveDoneItems(CompletedItems, myDF$Item_Number)
     
     # Loop over items, Get1CompletedItem
     
