@@ -66,7 +66,7 @@ GetGenericLANZItems <- function(LanzType) {
             myDF <- rbind(myDF, newRow)
         }
     }
-
+    write.csv(x = myDF, file = csvFileName, row.names = FALSE)
 }
 
 LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
@@ -138,11 +138,12 @@ RemoveStarterEntry <- function(LanzTypes){
 CreateSearchURL <- function(searchTerms){
     base <- "http://www.ebay.de/sch/i.html?"
     keywords <- paste("&_nkw=", searchTerms, sep = "")
-    pagenum <- "&_pgn=2"                        # Prob not necessary
+    #pagenum <- "&_pgn=2"                        # Prob not necessary
     numitems <- "&_ipg=200"
     complete <- "&LH_Complete=1"
     category <- "&_sacat=0"
     sold <- "&LH_Sold=1"
     seller <- "&_sasl=numismatiklanz"
-    return(paste(base, keywords, pagenum, numitems, complete, sold, seller, sep = ""))
+    #return(paste(base, keywords, pagenum, numitems, complete, sold, seller, sep = ""))
+    return(paste(base, keywords, numitems, complete, sold, seller, sep = ""))
 }
