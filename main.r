@@ -24,7 +24,7 @@ GetGenericLANZItems <- function(LanzType) {
     myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
                      colClasses = rep("character", 15))
     # Create searchURL
-    # Code here
+    searchURL <- CreateSearchURL(searchTerms = LanzTypes[(LanzTypes[, 1] == LanzType), 2])
     
     # Get completed items
     # Code here
