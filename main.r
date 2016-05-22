@@ -17,6 +17,19 @@ GetCompletedSeljuks <- function(){
 
 GetGenericLANZItems <- function(LanzType) {
     # Generic version of GetCompletedSeljuks
+    # LanzType here is - notice! - singular
+    # Read csv file
+    base <- "J:/Lanz/"
+    csvFileName <- paste(base, LanzType, "/", LanzType, ".csv", sep = "")
+    myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
+                     colClasses = rep("character", 15))
+    # Create searchURL
+    # Code here
+    
+    # Get completed items
+    # Code here
+    
+    # Loop over items, Get1CompletedItem
     
 }
 
