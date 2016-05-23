@@ -72,8 +72,8 @@ GetGenericLANZItems <- function(LanzType) {
 }
 
 LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
-                             "Umayyid", "Umayyaden",
-                             "Khwarizmshah", "Khwarizmshahs",
+                             "Umayyad", "Umayyaden",
+                             "Khwarzimshahs", "Khwarzimshahs",
                              "Ottoman", "Osmanen+Osmanisches",
                              "Muwahhid", "Muwahhiden+Muwahhid",
                              "Ghorid", "Ghoriden",
@@ -143,7 +143,7 @@ RemoveStarterEntry <- function(LanzTypes){
 CreateSearchURL <- function(searchTerms){
     base <- "http://www.ebay.de/sch/Munzen/11116/i.html?-from=R40"
     keywords <- paste("&_nkw=", searchTerms, "&_in_kw=2", sep = "")
-    #pagenum <- "&_pgn=2"                        # Prob not necessary
+    #pagenum <- "&_pgn=1"                        # Prob not necessary
     numitems <- "&_ipg=200"
     complete <- "&LH_Complete=1"
     category <- "&_sacat=11116"
