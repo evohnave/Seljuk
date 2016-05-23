@@ -142,9 +142,9 @@ CreateSearchURL <- function(searchTerms){
     #pagenum <- "&_pgn=2"                        # Prob not necessary
     numitems <- "&_ipg=200"
     complete <- "&LH_Complete=1"
-    category <- "&_sacat=0"
+    category <- "&_sacat=11116"
     sold <- "&LH_Sold=1"
     seller <- "&_sasl=numismatiklanz"
-    #return(paste(base, keywords, pagenum, numitems, complete, sold, seller, sep = ""))
-    return(paste(base, keywords, numitems, complete, sold, seller, sep = ""))
+    #return(paste(base, keywords, pagenum, numitems, complete, sold, seller, category, sep = ""))
+    return(paste(base, keywords, numitems, complete, sold, seller, category, sep = ""))
 }
