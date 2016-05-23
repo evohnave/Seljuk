@@ -20,6 +20,7 @@ GetGenericLANZItems <- function(LanzType) {
     # LanzType here is - notice! - singular
     # Read csv file
     base <- "J:/Lanz/"
+    #base <- "D:/Lanz/"    # Temp for work
     csvFileName <- paste(base, LanzType, "/", LanzType, ".csv", sep = "")
     myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
                      colClasses = rep("character", 15))
@@ -101,6 +102,7 @@ colnames(LanzTypes) <- c("Type", "SearchTerm")
 
 CreateDirectories <- function(LanzTypes) {
     base <- "J:/Lanz/"
+    #base <- "D:/Lanz/"    # Temp for work
     for(i in 1:(dim(LanzTypes)[1])){
         newDir <- paste(base, LanzTypes[i, 1], "/", sep = "")
         success <- dir.create(path = newDir)
@@ -115,6 +117,7 @@ CreateDirectories <- function(LanzTypes) {
 
 CreateCSVfiles <- function(LanzTypes){
     base <- "J:/Lanz/"
+    #base <- "D:/Lanz/"    # Temp for work
     # Read in sample data
     myDF <- InitializeSeljuks()[1,]
     myDF[1, 1] <- "100000000000"
@@ -126,6 +129,7 @@ CreateCSVfiles <- function(LanzTypes){
 
 RemoveStarterEntry <- function(LanzTypes){
     base <- "J:/Lanz/"
+    #base <- "D:/Lanz/"    # Temp for work
     for(i in 1:(dim(LanzTypes)[1])){
         csvFileName <- paste(base, LanzTypes[i, 1], "/", LanzTypes[i, 1], ".csv", sep = "")
         myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
