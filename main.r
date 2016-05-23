@@ -73,10 +73,10 @@ GetGenericLANZItems <- function(LanzType) {
 LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Umayyid", "Umayyaden",
                              "Khwarizmshah", "Khwarizmshahs",
-                             "Ottoman", "Osmanen%2C+Osmanisches",
-                             "Muwahhid", "Muwahhiden%2C+Muwahhid",
+                             "Ottoman", "Osmanen+Osmanisches",
+                             "Muwahhid", "Muwahhiden+Muwahhid",
                              "Ghorid", "Ghoriden",
-                             "Artuqid","Urtukiden%2C+Artukiden",
+                             "Artuqid","Urtukiden+Artukiden",
                              "Arab-Byzantine", "Arabo-Byzantiner",
                              "Abbasid", "Abbasiden",
                              "Ayyubid", "Ayyubiden",
@@ -84,18 +84,18 @@ LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Zengid", "Zengiden",
                              "Lu'lu'id", "Luluiden",
                              "Atabegs", "Atabegs",
-                             "Mameluke", "Mamelukken%2C+Mameluken",
+                             "Mameluke", "Mamelukken+Mameluken",
                              "Fatimid", "Farimiden",
                              "Timurid", "Timuriden",
                              "Ghaznavid", "Ghaznaviden",
-                             "Turkey", "Türkei%2C+Turkei%2C+Turkey",
+                             "Turkey", "Türkei+Turkei+Turkey",
                              "Mongol", "Mongolei",
                              "Sasanid", "Sasaniden",
-                             "Crusaders", "Crusaders%2C+Kreuzfahrer",
+                             "Crusaders", "Crusaders+Kreuzfahrer",
                              "Tabaristan", "Tabaristan",
                              "Armenia", "Armenien",
                              "Byzantine", "Byzantine",
-                             "Achaea", "Achaea%2C+Achaia"),
+                             "Achaea", "Achaea+Achaia"),
                     ncol = 2, byrow = TRUE)
 colnames(LanzTypes) <- c("Type", "SearchTerm")
 
@@ -137,14 +137,14 @@ RemoveStarterEntry <- function(LanzTypes){
 }
 
 CreateSearchURL <- function(searchTerms){
-    base <- "http://www.ebay.de/sch/i.html?"
-    keywords <- paste("&_nkw=", searchTerms, sep = "")
+    base <- "http://www.ebay.de/sch/Munzen/11116/i.html?-from=R40"
+    keywords <- paste("&_nkw=", searchTerms, "&_in_kw=2", sep = "")
     #pagenum <- "&_pgn=2"                        # Prob not necessary
     numitems <- "&_ipg=200"
     complete <- "&LH_Complete=1"
     category <- "&_sacat=11116"
     sold <- "&LH_Sold=1"
-    seller <- "&_sasl=numismatiklanz"
+    seller <- "&_fsradio=%26LH_SpecificSeller%3D1&_saslop=1&_sasl=numismatiklanz"
     #return(paste(base, keywords, pagenum, numitems, complete, sold, seller, category, sep = ""))
     return(paste(base, keywords, numitems, complete, sold, seller, category, sep = ""))
 }
