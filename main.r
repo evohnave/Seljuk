@@ -103,7 +103,9 @@ LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Armenia", "Armenien",
                              "Byzantine", "Byzantine",
                              "Achaea", "Achaea+Achaia",
-                             "Venice", "Venedig"),
+                             "Venice", "Venedig",
+                             "Egypt", "Egypt",
+                             "Tokharistan", "Tokharistan"),
                     ncol = 2, byrow = TRUE)
 colnames(LanzTypes) <- c("Type", "SearchTerm")
 
