@@ -1,3 +1,8 @@
+suppressWarnings(library(rvest, quietly = TRUE, warn.conflicts = FALSE))
+suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
+suppressWarnings(library(stringi, quietly = TRUE, warn.conflicts = FALSE))
+
+
 # Main script
 GetCompletedSeljuks <- function(){
     source("Seljuk.r")
