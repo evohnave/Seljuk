@@ -15,7 +15,7 @@ GetCompletedSeljuks <- function(){
     rm(list = ls())
 }
 
-GetGenericLANZItems <- function(LanzType) {
+GetGenericLANZItems <- function(LanzType, pageNum = 0){
     # Generic version of GetCompletedSeljuks
     # LanzType here is - notice! - singular
     # Read csv file
@@ -25,12 +25,13 @@ GetGenericLANZItems <- function(LanzType) {
     myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
                      colClasses = rep("character", 15))
     # Create searchURL
-    searchURL <- CreateSearchURL(searchTerms = LanzTypes[(LanzTypes[, 1] == LanzType), 2])
+    searchURL <- CreateSearchURL(searchTerms = LanzTypes[(LanzTypes[, 1] == LanzType), 2], pageNum = pageNum)
     # Get completed items, remove those already done
     CompletedItems <- GetCompletedItems(searchURL)
     CompletedItems <- RemoveDoneItems(CompletedItems, myDF$Item_Number)
     # Loop over items, Get1CompletedItem
     if(length(CompletedItems)>0){
+        print(paste("Adding", length(CompletedItems), "new items"))
         for(i in 1:(length(CompletedItems))){
             itm <- CompletedItems[i]
             # Create item url
@@ -86,7 +87,7 @@ LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Lu'lu'id", "Luluiden",
                              "Atabegs", "Atabegs",
                              "Mameluke", "Mamelukken+Mameluken",
-                             "Fatimid", "Farimiden",
+                             "Fatimid", "Fatimiden",
                              "Timurid", "Timuriden",
                              "Ghaznavid", "Ghaznaviden",
                              "Turkey", "Türkei+Turkei+Turkey",
@@ -96,7 +97,8 @@ LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Tabaristan", "Tabaristan",
                              "Armenia", "Armenien",
                              "Byzantine", "Byzantine",
-                             "Achaea", "Achaea+Achaia"),
+                             "Achaea", "Achaea+Achaia",
+                             "Venice", "Venedig"),
                     ncol = 2, byrow = TRUE)
 colnames(LanzTypes) <- c("Type", "SearchTerm")
 
@@ -140,15 +142,21 @@ RemoveStarterEntry <- function(LanzTypes){
     }    
 }
 
-CreateSearchURL <- function(searchTerms){
+CreateSearchURL <- function(searchTerms, pageNum = 0){
     base <- "http://www.ebay.de/sch/Munzen/11116/i.html?-from=R40"
     keywords <- paste("&_nkw=", searchTerms, "&_in_kw=2", sep = "")
-    #pagenum <- "&_pgn=1"                        # Prob not necessary
+    #pagenum <- "&_pgn=2"                        # Prob not necessary
+
     numitems <- "&_ipg=200"
     complete <- "&LH_Complete=1"
     category <- "&_sacat=11116"
     sold <- "&LH_Sold=1"
     seller <- "&_fsradio=%26LH_SpecificSeller%3D1&_saslop=1&_sasl=numismatiklanz"
-    #return(paste(base, keywords, pagenum, numitems, complete, sold, seller, category, sep = ""))
-    return(paste(base, keywords, numitems, complete, sold, seller, category, sep = ""))
+    if(pageNum != 0){
+        pagenum <- paste("&_pgn=", pageNum, sep = "")
+        ret <- paste(base, keywords, pagenum, numitems, complete, sold, seller, category, sep = "")
+    } else {
+        ret <- paste(base, keywords, numitems, complete, sold, seller, category, sep = "")
+    }
+    return(ret)
 }
