@@ -1,7 +1,7 @@
 GetCompletedItems <- function(searchURL){
     # Get list of latest completed auctions using search string
-    require(rvest, warn.conflicts = FALSE, quietly = TRUE)
-    require(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+    suppressWarnings(library(rvest, quietly = TRUE, warn.conflicts = FALSE))
+    suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
     # Get the web page
     html <- read_html(searchURL, verbose = TRUE)
     # Get the <li> tags
@@ -20,7 +20,7 @@ stripBS <- function(str) {
     str <- gsub(pattern = "\\t", x = str, replacement = "")
     str <- gsub(pattern = "\\n", x = str, replacement = "")
     str <- gsub(pattern = "\\r", x = str, replacement = " ")
-    require(stringi, warn.conflicts = FALSE, quietly = TRUE)
+    library(stringi)
     return(stri_trim_both(str))
 }
 
