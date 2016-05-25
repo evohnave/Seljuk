@@ -3,6 +3,13 @@ suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
 suppressWarnings(library(stringi, quietly = TRUE, warn.conflicts = FALSE))
 
 
+updateCoins <- function(){
+    for(i in 1:(dim(LanzTypes)[1])){
+        GetGenericLANZItems(LanzTypes[i, 1])
+    }
+}
+
+
 # Main script
 GetCompletedSeljuks <- function(){
     source("Seljuk.r")
