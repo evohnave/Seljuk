@@ -7,7 +7,7 @@ updateCoins <- function(){
     numDone <- NULL
     for(i in 1:(dim(LanzTypes)[1])){
         num <- GetGenericLANZItems(LanzTypes[i, 1])
-        numDone <- rbind(numdone, list(LanzTypes[i, 1], num))
+        numDone <- rbind(numDone, list(LanzTypes[i, 1], num))
     }
     return(numDone)
 }
@@ -47,7 +47,7 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
     
     # Loop over items, Get1CompletedItem
     if(length(CompletedItems)>0){
-        print(paste("Adding", length(CompletedItems), "new items"))
+        print(paste("Adding", length(CompletedItems), "new items to", LanzType))
         for(i in 1:(length(CompletedItems))){
             itm <- CompletedItems[i]
             # Create item url
