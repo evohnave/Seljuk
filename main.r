@@ -3,16 +3,6 @@ suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
 suppressWarnings(library(stringi, quietly = TRUE, warn.conflicts = FALSE))
 
 
-updateCoins <- function(){
-    numDone <- NULL
-    for(i in 1:(dim(LanzTypes)[1])){
-        num <- GetGenericLANZItems(LanzTypes[i, 1])
-        numDone <- rbind(numDone, list(LanzTypes[i, 1], num))
-    }
-    return(numDone)
-}
-
-
 # Main script
 GetCompletedSeljuks <- function(){
     source("Seljuk.r")
@@ -44,10 +34,9 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
     # Get completed items, remove those already done
     CompletedItems <- GetCompletedItems(searchURL)
     CompletedItems <- RemoveDoneItems(CompletedItems, myDF$Item_Number)
-    
     # Loop over items, Get1CompletedItem
     if(length(CompletedItems)>0){
-        print(paste("Adding", length(CompletedItems), "new items to", LanzType))
+        print(paste("Adding", length(CompletedItems), "new items"))
         for(i in 1:(length(CompletedItems))){
             itm <- CompletedItems[i]
             # Create item url
@@ -86,7 +75,6 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
         }
     }
     write.csv(x = myDF, file = csvFileName, row.names = FALSE)
-    return(length(CompletedItems))
 }
 
 LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
