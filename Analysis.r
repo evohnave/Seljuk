@@ -3,7 +3,7 @@ GraphCoins <- function(){
     
     SeljuksDF <- InitializeSeljuks()
     par(mar = c(4, 3, 3, 2) + 0.1)
-    par(mfrow = c(3,2))
+    par(mfrow = c(5, 2))
     vals <- SeljuksDF$Price
     vals <- gsub(pattern = "EUR ", replacement = "", x = vals)
     vals <- gsub(pattern = ",", replacement = ".", x = vals)
@@ -48,4 +48,37 @@ GraphCoins <- function(){
     suppressWarnings(plot(density(as.numeric(vals), from = 0),
                           main="Price Density For 3 Brothers",
                           xlab="Price in Euro"))
+    
+    PossKK2 <- grepl(pattern = "*Kay-Kawus-II-*", x = SeljuksDF$Title)
+    vals <- SeljuksDF$Price[Poss3B]
+    vals <- gsub(pattern = "EUR ", replacement = "", x = vals)
+    vals <- gsub(pattern = ",", replacement = ".", x = vals)
+    suppressWarnings(plot(density(as.numeric(vals), from = 0),
+                          main="Price Density For II. Keyhüsrev",
+                          xlab="Price in Euro"))
+    
+    PossKK3 <- grepl(pattern = "*Kay-Kawus-III-*", x = SeljuksDF$Title)
+    vals <- SeljuksDF$Price[Poss3B]
+    vals <- gsub(pattern = "EUR ", replacement = "", x = vals)
+    vals <- gsub(pattern = ",", replacement = ".", x = vals)
+    suppressWarnings(plot(density(as.numeric(vals), from = 0),
+                          main="Price Density For III. Keyhüsrev",
+                          xlab="Price in Euro"))
+    
+    PossM2 <- grepl(pattern = "*Masud-II-*", x = SeljuksDF$Title)
+    vals <- SeljuksDF$Price[Poss3B]
+    vals <- gsub(pattern = "EUR ", replacement = "", x = vals)
+    vals <- gsub(pattern = ",", replacement = ".", x = vals)
+    suppressWarnings(plot(density(as.numeric(vals), from = 0),
+                          main="Price Density For II. Masud",
+                          xlab="Price in Euro"))
+    
+    PossKK1 <- grepl(pattern = "*Kay-Kawus-I-*", x = SeljuksDF$Title)
+    vals <- SeljuksDF$Price[Poss3B]
+    vals <- gsub(pattern = "EUR ", replacement = "", x = vals)
+    vals <- gsub(pattern = ",", replacement = ".", x = vals)
+    suppressWarnings(plot(density(as.numeric(vals), from = 0),
+                          main="Price Density For I. Keyhüsrev",
+                          xlab="Price in Euro"))
+    
 }
