@@ -3,6 +3,16 @@ suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
 suppressWarnings(library(stringi, quietly = TRUE, warn.conflicts = FALSE))
 
 
+updateCoins <- function(){
+    numDone <- NULL
+    for(i in 1:(dim(LanzTypes)[1])){
+        num <- GetGenericLANZItems(LanzTypes[i, 1])
+        if(is.null(num)) num <- 0
+        numDone <- rbind(numDone, list(LanzTypes[i, 1], num))
+    }
+    return(numDone)
+}
+
 # Main script
 GetCompletedSeljuks <- function(){
     source("Seljuk.r")
@@ -16,8 +26,6 @@ GetCompletedSeljuks <- function(){
         }
     }
     CloseSeljuks(SeljuksDF)
-    # Clean up
-    rm(list = ls())
 }
 
 GetGenericLANZItems <- function(LanzType, pageNum = 0){
