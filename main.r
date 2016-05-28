@@ -83,6 +83,7 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
         }
     }
     write.csv(x = myDF, file = csvFileName, row.names = FALSE)
+    return(length(CompletedItems))
 }
 
 LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
