@@ -10,6 +10,8 @@ updateCoins <- function(){
         if(is.null(num)) num <- 0
         numDone <- rbind(numDone, list(LanzTypes[i, 1], num))
     }
+    colnames(numDone) <- c("Type", "# Added")
+    rownames(numDone) <- ""
     return(numDone)
 }
 
