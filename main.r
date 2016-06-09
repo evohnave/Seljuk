@@ -11,7 +11,7 @@ updateCoins <- function(){
         numDone <- rbind(numDone, list(LanzTypes[i, 1], num))
     }
     colnames(numDone) <- c("Type", "# Added")
-    rownames(numDone) <- ""
+    rownames(numDone) <- NULL
     return(numDone)
 }
 
