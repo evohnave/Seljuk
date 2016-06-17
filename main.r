@@ -2,7 +2,6 @@ suppressWarnings(library(rvest, quietly = TRUE, warn.conflicts = FALSE))
 suppressWarnings(library(dplyr, quietly = TRUE, warn.conflicts = FALSE))
 suppressWarnings(library(stringi, quietly = TRUE, warn.conflicts = FALSE))
 
-
 updateCoins <- function(){
     numDone <- NULL
     for(i in 1:(dim(LanzTypes)[1])){
