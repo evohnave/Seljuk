@@ -101,7 +101,7 @@ LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Zengid", "Zengiden",
                              "Lu'lu'id", "Luluiden",
                              "Atabegs", "Atabegs",
-                             "Mameluke", "Mamelukken+Mameluken",
+                             "Mameluke", "Mamelukken+Mameluken+Mameluk",
                              "Fatimid", "Fatimiden",
                              "Timurid", "Timuriden",
                              "Ghaznavid", "Ghaznaviden",
@@ -115,7 +115,8 @@ LanzTypes <- matrix(data = c("Seljuk", "Rumseldschuken",
                              "Achaea", "Achaea+Achaia",
                              "Venice", "Venedig",
                              "Egypt", "Egypt",
-                             "Tokharistan", "Tokharistan"),
+                             "Tokharistan", "Tokharistan",
+                             "Samanid", "Samaniden"),
                     ncol = 2, byrow = TRUE)
 colnames(LanzTypes) <- c("Type", "SearchTerm")
 
