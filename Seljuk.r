@@ -9,7 +9,9 @@ GetCompletedItems <- function(searchURL){
     df<- bind_rows(lapply(xml_attrs(nodes), 
                           function(x) data.frame(as.list(x), 
                                                  stringsAsFactors=FALSE)))
-    artNums <- df$listingid[!(is.na(df$listingid))]
+    artNums <- 0
+    if(!is.null(df$listingid)){
+        artNums <- df$listingid[!(is.na(df$listingid))]}
     # OK, I've got the list of items to look at.
     return(artNums)
 }
