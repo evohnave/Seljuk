@@ -45,7 +45,7 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
     CompletedItems <- RemoveDoneItems(CompletedItems, myDF$Item_Number)
     # Loop over items, Get1CompletedItem
     if(length(CompletedItems)>0){
-        print(paste("Adding", length(CompletedItems), "new items"))
+        print(paste("Adding", length(CompletedItems), "new items in", LanzType))
         for(i in 1:(length(CompletedItems))){
             itm <- CompletedItems[i]
             # Create item url
