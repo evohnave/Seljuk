@@ -71,7 +71,7 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
             itmURLend <- "?nma=true&orig_cvip=true"
             itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
             destFileName <- paste(base,  LanzType, "/", "html/", itm, ".htm", sep = "")
-            download.file(url = itmURL, destfile = destFileName, mode = "wb")
+            try(download.file(url = itmURL, destfile = destFileName, mode = "wb"))
             
             # Write item to DF
             newRow <- myDF[1, ]
