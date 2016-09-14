@@ -27,6 +27,7 @@ GetCompletedSeljuks <- function(){
         }
     }
     CloseSeljuks(SeljuksDF)
+    print(paste("Got", length(CompletedItems),"new Seljuk coins."))
 }
 
 GetGenericLANZItems <- function(LanzType, pageNum = 0){
@@ -45,8 +46,10 @@ GetGenericLANZItems <- function(LanzType, pageNum = 0){
     CompletedItems <- RemoveDoneItems(CompletedItems, myDF$Item_Number)
     # Loop over items, Get1CompletedItem
     if(length(CompletedItems)>0){
-        print(paste("Adding", length(CompletedItems), "new items in", LanzType))
+        numOf <- length(CompletedItems)
+        print(paste("Adding", numOf, "new items in", LanzType))
         for(i in 1:(length(CompletedItems))){
+            print(paste(numOf - i + 1, "items to go in", LanzType))
             itm <- CompletedItems[i]
             # Create item url
             itmURLstart <- "http://www.ebay.de/itm/"
@@ -178,3 +181,5 @@ CreateSearchURL <- function(searchTerms, pageNum = 0){
     }
     return(ret)
 }
+
+
