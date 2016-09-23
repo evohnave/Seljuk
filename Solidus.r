@@ -79,17 +79,17 @@ Get1CompletedSolidusItem <- function(itm, SeljuksDF){
 #   Created it in this dropbox folder
 #   ./dropbox/Seljuk/SolidusImages
 
-# Need a Solidus csv file
-# Taken from CreateCSVfiles
-# Read in sample data
-myDF <- InitializeSeljuks()[1,]
-myDF[1, 1] <- "100000000000"
-csvFileName <- "Solidus.csv"
-write.csv(x = myDF, file = csvFileName, row.names = FALSE)
-# After the whole shebang works, delete that first entry
-#   Taken from RemoveStarterEntry
-myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
-                 colClasses = rep("character", 15))
-myDF <- myDF[-(myDF[, 1])]
-myDF <- myDF[!(myDF$Item_Number == "100000000000"), ]
-write.csv(x = myDF, file = csvFileName, row.names = FALSE)
+# # Need a Solidus csv file
+# # Taken from CreateCSVfiles
+# # Read in sample data
+# myDF <- InitializeSeljuks()[1,]
+# myDF[1, 1] <- "100000000000"
+# csvFileName <- "Solidus.csv"
+# write.csv(x = myDF, file = csvFileName, row.names = FALSE)
+# # After the whole shebang works, delete that first entry
+# #   Taken from RemoveStarterEntry
+# myDF <- read.csv(csvFileName, stringsAsFactors = FALSE, 
+#                  colClasses = rep("character", 15))
+# myDF <- myDF[-(myDF[, 1])]
+# myDF <- myDF[!(myDF$Item_Number == "100000000000"), ]
+# write.csv(x = myDF, file = csvFileName, row.names = FALSE)
