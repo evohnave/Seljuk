@@ -47,6 +47,8 @@ Get1CompletedSolidusItem <- function(itm, SeljuksDF){
     imgList <- gsub(pattern = "http://i.ebayimg.com/t/",
                     x = imgList, replacement = "",
                     ignore.case = TRUE)
+    # Special for Solidus... get rid of list items that don't start with SOL-
+    imgList <- imgList[grepl("^SOL-", imgList)]
     # Strip off the /$_##.JPG
     imgList <- gsub(pattern = "\\/\\$_[0-9]{2}\\.JPG",
                     x = imgList, replacement = "",
@@ -54,7 +56,8 @@ Get1CompletedSolidusItem <- function(itm, SeljuksDF){
     # Split on /00/s/
     imgList <- stri_split(imgList, regex = "\\/00\\/s\\/")
     # Sort the strings
-    imgList <- matrix(data = unlist(imgList[2:3]), byrow = TRUE, ncol = 2)
+    #imgList <- matrix(data = unlist(imgList[2:3]), byrow = TRUE, ncol = 2)
+    imgList <- matrix(data = unlist(imgList), byrow = TRUE, ncol = 2)
     title <- unique(imgList[ ,1])
     imageURLs <- unique(imgList[ ,2])
     # Rebuild image urls
