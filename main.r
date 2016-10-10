@@ -181,4 +181,15 @@ CreateSearchURL <- function(searchTerms, pageNum = 0){
     return(ret)
 }
 
-
+GetOldCoins <- function(LanzType){
+  numDone <- NULL
+  for(i in 1:20){
+    print(paste("Attempting page", i, sep = " "))
+    num <- GetGenericLANZItems(LanzType, i)
+    if(is.null(num)) num <- 0
+    numDone <- rbind(numDone, list(i, num))
+    print(paste("Got", num, "items from page", i, sep = " "))
+  }
+  names(numDone) <- c("Page", "items")
+  return(numDone)
+}
