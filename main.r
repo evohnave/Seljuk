@@ -190,6 +190,7 @@ GetOldCoins <- function(LanzType){
     numDone <- rbind(numDone, list(i, num))
     print(paste("Got", num, "items from page", i, sep = " "))
   }
+  numDone <- as.data.frame(numDone)
   names(numDone) <- c("Page", "items")
   return(numDone)
 }
