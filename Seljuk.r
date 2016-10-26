@@ -30,17 +30,40 @@ Get1CompletedItem <- function(itm, SeljuksDF){
     # Will get 1 completed item, including price, description, and pictures
     # OK, no description for now
     # Create item url
+    # Create the search URL
     itmURLstart <- "http://www.ebay.de/itm/"
     itmURLend <- "?nma=true&orig_cvip=true"
     itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
-    # Get item
+    
+    # Create html
     html <- read_html(itmURL)
     price <- html_nodes(html, "#prcIsum_bidPrice") %>% xml_text()
     endTime <- html_nodes(html, "#bb_tlft") %>% xml_text() %>% stripBS()
-    # Description not working, so skip for now
-    results <- getEbayImagesAndTitle(html)
-    title <- results[[1]]
-    imageURLs <- results[[2]]
+    title <- html_node(html, "title") %>% 
+      gsub(pattern = "<title>", replacement = "", ignore.case = TRUE) %>% 
+      gsub(pattern = "\\W|\\S*</title>", replacement = "", ignore.case = TRUE)
+    
+    # Looking for images now
+    imgs <- html_nodes(html, xpath = "//img")
+    oldPattern <- "http://i.ebayimg.com/t/"
+    newPattern <- "http://i.ebayimg.com/images/g/"
+    
+    if(sum(grepl(pattern = paste(newPattern, "*", sep = ""),
+                 x = imgs,ignore.case = TRUE)) > 0){
+      imgList <- imgs[grepl(pattern = paste(newPattern, "*", sep = ""),
+                            x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
+    } else {
+      imgList <- imgs[grepl(pattern = paste(oldPattern, "*", sep = ""),
+                            x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
+    }
+    # OK, image list is good now except for the ending... strip that off
+    endPattern <- '\\/s-\\S*jpg$'
+    imgList <- gsub(pattern = endPattern, 
+                    replacement = '', 
+                    x = imgList,
+                    ignore.case = TRUE)
+    # Create new image urls
+    imageURLs <- paste(imgList, "/s-l1200.jpg", sep = "") %>% unique()
     saveEbayImage(itm, imageURLs)
     SaveHTMLtoText(itm)
     SeljuksDF <- writeToMongoDB(itm, price, endTime, title, imageURLs, SeljuksDF)
@@ -64,7 +87,6 @@ saveEbayImage <- function(item, imgUrls) {
     # Expect: item to be the 12 digit item number
     #         imgUrls to be 2 image urls
     # Will save to default directory, one as item + o.jpg, one as item + r.jpg
-    
     destFileName <- paste("./Images/", item,
                           c("o","r"), ".jpg", sep = "")
     lapply(X = 1:2, FUN = function(x){download.file(url = imgUrls[x],
@@ -73,32 +95,45 @@ saveEbayImage <- function(item, imgUrls) {
 }
 
 getEbayImagesAndTitle <- function(html){
+    # 20161025 No title available
     # Assumes 2 images available
     # No error checking
     imgs <- html_nodes(html, xpath = "//img")
+    # Old pattern
+    Pattern = "http://i.ebayimg.com/t/"
+    # New pattern
+    newPattern = "http://i.ebayimg.com/images/g/"
     # There's a faster way to do this but...
     # Get the kind of img src I want
-    imgList <- imgs[grepl(pattern = "http://i.ebayimg.com/t/*",
+    imgList <- imgs[grepl(pattern = paste(newPattern, "*", sep = ""),
                           x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
     # Get rid of the beginning
-    imgList <- gsub(pattern = "http://i.ebayimg.com/t/",
+    imgList <- gsub(pattern = paste(newPattern, "*", sep = ""),
                     x = imgList, replacement = "",
                     ignore.case = TRUE)
+    # Old
     # Strip off the /$_##.JPG
-    imgList <- gsub(pattern = "\\/\\$_[0-9]{2}\\.JPG",
-                    x = imgList, replacement = "",
+    # imgList <- gsub(pattern = "\\/\\$_[0-9]{2}\\.JPG",
+    #                 x = imgList, replacement = "",
+    #                 ignore.case = TRUE)
+    imgList <- gsub(pattern = "\\/s-\\S*.jpg", x = imgList, replacement = "",
                     ignore.case = TRUE)
-    # Split on /00/s/
-    imgList <- stri_split(imgList, regex = "\\/00\\/s\\/")
-    # Sort the strings
-    imgList <- matrix(data = unlist(imgList), byrow = TRUE, ncol = 2)
-    title <- unique(imgList[ ,1])
-    imgs <- unique(imgList[ ,2])
+    # 20161025 Comment out the following lines since not necessary TODAY
+    # # Split on /00/s/
+    # imgList <- stri_split(imgList, regex = "\\/00\\/s\\/")
+    # # Sort the strings
+    # imgList <- matrix(data = unlist(imgList), byrow = TRUE, ncol = 2)
+    # title <- unique(imgList[ ,1])
+    # imgs <- unique(imgList[ ,2])
+    # Get rid of extraneous starting characters
+    #imgs <- gsub(pattern = "^\\S*\\/z\\/",replacement = "",x = imgs,ignore.case = TRUE)
+    imgs <- unique(imgList)
     # Rebuild image urls
-    imgs <- paste("http://i.ebayimg.com/t/", title, "/00/s/", imgs, 
-                  "/$_10.jpg", sep = "")
+    imgs <- paste(newPattern, imgs, "/s-l1200.jpg", sep = "")
     # now return title and imgs
-    return(list(title, imgs))
+    # 20161025 not returning title
+    #return(list(title, imgs))
+    return(imgs)
 }
 
 IdentifyFileLibrary <- function(){
