@@ -30,43 +30,44 @@ Get1CompletedSolidusItem <- function(itm, SeljuksDF){
     # Will get 1 completed item, including price, description, and pictures
     # OK, no description for now
     # Create item url
+    # Create the search URL
     itmURLstart <- "http://www.ebay.de/itm/"
     itmURLend <- "?nma=true&orig_cvip=true"
     itmURL <- paste(itmURLstart, itm, itmURLend, sep = "")
-    # Get item
+    
+    # Create html
     html <- read_html(itmURL)
     price <- html_nodes(html, "#prcIsum_bidPrice") %>% xml_text()
     endTime <- html_nodes(html, "#bb_tlft") %>% xml_text() %>% stripBS()
-    # Description not working, so skip for now
+    title <- html_node(html, "title") %>% 
+      gsub(pattern = "<title>", replacement = "", ignore.case = TRUE) %>% 
+      gsub(pattern = "\\W|\\S*</title>", replacement = "", ignore.case = TRUE)
+    
+    # Looking for images now
     imgs <- html_nodes(html, xpath = "//img")
-    # There's a faster way to do this but...
-    # Get the kind of img src I want
-    imgList <- imgs[grepl(pattern = "http://i.ebayimg.com/t/*",
-                          x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
-    # Get rid of the beginning
-    imgList <- gsub(pattern = "http://i.ebayimg.com/t/",
-                    x = imgList, replacement = "",
+    oldPattern <- "http://i.ebayimg.com/t/"
+    newPattern <- "http://i.ebayimg.com/images/g/"
+    
+    if(sum(grepl(pattern = paste(newPattern, "*", sep = ""),
+                 x = imgs,ignore.case = TRUE)) > 0){
+      imgList <- imgs[grepl(pattern = paste(newPattern, "*", sep = ""),
+                            x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
+    } else {
+      imgList <- imgs[grepl(pattern = paste(oldPattern, "*", sep = ""),
+                            x = imgs,ignore.case = TRUE)] %>% xml_attr(attr = "src")
+    }
+    # OK, image list is good now except for the ending... strip that off
+    endPattern <- '\\/s-\\S*jpg$'
+    imgList <- gsub(pattern = endPattern, 
+                    replacement = '', 
+                    x = imgList,
                     ignore.case = TRUE)
-    # Special for Solidus... get rid of list items that don't start with SOL-
-    imgList <- imgList[grepl("^SOL-", imgList)]
-    # Strip off the /$_##.JPG
-    imgList <- gsub(pattern = "\\/\\$_[0-9]{2}\\.JPG",
-                    x = imgList, replacement = "",
-                    ignore.case = TRUE)
-    # Split on /00/s/
-    imgList <- stri_split(imgList, regex = "\\/00\\/s\\/")
-    # Sort the strings
-    #imgList <- matrix(data = unlist(imgList[2:3]), byrow = TRUE, ncol = 2)
-    imgList <- matrix(data = unlist(imgList), byrow = TRUE, ncol = 2)
-    title <- unique(imgList[ ,1])
-    imageURLs <- unique(imgList[ ,2])
-    # Rebuild image urls
-    imgs <- paste("http://i.ebayimg.com/t/", title, "/00/s/", imageURLs, 
-                  "/$_10.jpg", sep = "")
+    # Create new image urls
+    imgURL <- paste(imgList, "/s-l1200.jpg", sep = "") %>% unique()
     # Save the files
     destFileName <- paste("./SolidusImages/", itm,
                           "or", ".jpg", sep = "")
-    download.file(url = imgs,
+    download.file(url = imgURL,
                   destfile = destFileName,
                   mode = "wb")
     # Save the html in the same folder as Lanz Seljuks
@@ -74,7 +75,7 @@ Get1CompletedSolidusItem <- function(itm, SeljuksDF){
     download.file(url = itmURL, destfile = destFileName, mode = "wb")
     
     
-    SeljuksDF <- writeToMongoDB(itm, price, endTime, title, imageURLs, SeljuksDF)
+    SeljuksDF <- writeToMongoDB(itm, price, endTime, title, imgURL, SeljuksDF)
     return(SeljuksDF)
 }
 
